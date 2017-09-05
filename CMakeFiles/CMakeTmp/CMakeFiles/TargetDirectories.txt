@@ -1,0 +1,3 @@
+/home/echo/Huffman/CMakeFiles/CMakeTmp/CMakeFiles/edit_cache.dir
+/home/echo/Huffman/CMakeFiles/CMakeTmp/CMakeFiles/rebuild_cache.dir
+/home/echo/Huffman/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_8edfa.dir

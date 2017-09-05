@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/echo/Huffman/src/encoder.cpp
+encoder.h
+/home/echo/Huffman/src/encoder.h
+
+/home/echo/Huffman/src/main.cpp
+cstdio
+-
+vector.h
+/home/echo/Huffman/src/vector.h
+encoder.h
+/home/echo/Huffman/src/encoder.h
+
+include/encoder.h
+huffman_tree.h
+include/huffman_tree.h
+
+include/huffman_tree.h
+
+include/vector.h
+

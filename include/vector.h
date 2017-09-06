@@ -1,6 +1,6 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
-
+#include "def.h"
 /**
  * 向量
  */
@@ -8,6 +8,7 @@
 template <typename T>
 class vector 
 {
+    using size_t=unsigned int;
 private:
     T * _buff;
     size_t _size;
@@ -81,6 +82,5 @@ vector<T>::~vector()
         delete [] _buff;
     }
 }
-
 
 #endif

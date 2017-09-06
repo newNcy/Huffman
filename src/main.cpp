@@ -1,32 +1,24 @@
 #include <cstdio>
-#include "vector.h"
+#include <sstream>
 #include "encoder.h"
 /**
  * 用于计算频率
  */
-typedef struct _e
-{
-    char ch;
-    int count;
-    struct _e * next;
-}e;
-
-
-
+using std::stringstream;
 
 int main (int argc, char *argv[])
 {
 
 
-    vector <char> str;
+    stringstream str;
     encoder ec;
     while (true) {
         char ch = getchar();
         if (ch != '\n') {
             str<<ch;
         }else {
-            printf("%s\n",str.value());
-        
+            printf("%s\n",ec.encode(str.str().c_str()));        
+            fflush(stdout);
             break;
         }
     }

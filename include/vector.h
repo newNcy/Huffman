@@ -1,6 +1,7 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
-#include "def.h"
+//#include "def.h"
+#include <cstring>
 /**
  * 向量
  */
@@ -8,11 +9,10 @@
 template <typename T>
 class vector 
 {
-    using size_t=unsigned int;
 private:
     T * _buff;
-    size_t _size;
-    size_t _len;
+    int _size;
+    int _len;
 public:
     vector();
     void push_back (const T & _t);
@@ -42,8 +42,9 @@ template <typename T>
 void vector<T>::push_back(const T&_t)
 {
     if (_len == _size ) {
-        _size += 100;
+        _size += 1;
         T * new_buff = new T[_size];
+        memset((char*)new_buff,0,_size);
         for (int i = 0 ; i < _len; i++) {
             new_buff[i] = _buff[i];
         }
@@ -66,8 +67,10 @@ template<typename T>
 const T *vector<T>::value() const
 {
     T * rev = new T[_len];
+    memset((char*)rev,0,_len);
     for (int i =0; i < _len; i++) {
         rev[i] = _buff[i];
+
     }
     return rev;
 }

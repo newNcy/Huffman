@@ -1,7 +1,7 @@
 
 PROJECT(huffman)
-#SET(CMAKE_C_COMPILER "/mingw64/bin/gcc.exe")
-#SET(CMAKE_CXX_COMPILER "/mingw64/bin/g++.exe")
+SET(CMAKE_C_COMPILER "/mingw64/bin/gcc.exe")
+SET(CMAKE_CXX_COMPILER "/mingw64/bin/g++.exe")
 cmake_minimum_required(VERSION 3.6)
 add_compile_options(-std=c++11)
 include_directories(include)

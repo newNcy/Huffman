@@ -17,7 +17,8 @@ int main (int argc, char *argv[])
         if (ch != '\n') {
             str<<ch;
         }else {
-            printf("%s\n",ec.encode(str.str().c_str()));        
+            printf("\n%s",ec.encode(str.str().c_str()));        
+            printf("\n");        
             fflush(stdout);
             break;
         }

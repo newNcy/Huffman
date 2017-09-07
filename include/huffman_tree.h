@@ -15,16 +15,18 @@ enum node_type
  */
 typedef struct _node
 {
-    int weight;
+    int w;
     node_type nt;
     char c;
+    struct _node *left;
+    struct _node * right;
 }node;
 
 /**
  * 霍夫曼树
  */
 
-using huffman_tree = node;
+using huffman_tree = node *;
 
 
 #endif

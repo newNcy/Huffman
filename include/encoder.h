@@ -2,20 +2,15 @@
 #define _DECODER_H
 #include <cstring>
 #include <vector>
+#include <sstream>
 #include "huffman_tree.h"
 #include <map>
 
+
+
 using std::map;
+using std::stringstream;
 using std::vector;
-/**
- * 用于计算频率
- */
-typedef struct _e
-{
-    char ch;
-    int count;
-    struct _e * next;
-}e;
 
 
 /**
@@ -25,15 +20,30 @@ class encoder
 {
     using rate = map<char,int>;
     using word = map<char,vector<char> >;
+
+    /* 字符<->出现次数 映射 */
     rate _rate;
+    /* 霍夫曼树 */
     huffman_tree _htree;
+    /* 字符<->编码 映射 */
     word _word;
+
+    /* 编码缓冲区 */
+    vector<char> bitB;
+
+    /* 先序遍历树得到编码 */
+    void order_get_word(huffman_tree h);
+
+    /* 获取频率 */
     rate get_rate(const char *raw);
-    huffman_tree get_tree(rate & _r);
-    word get_word(huffman_tree & tree);
+    /* 调用get_rate 获取huffman tree */
+    huffman_tree get_tree(const char * raw);
+    /* 调用order_get_word获取编码映射 */
+    word get_word(const char * raw);
 
 public:
     encoder();
+    /* 对字符串进行哈夫曼编码 */
     const char * encode(const char * raw);
     ~encoder();
 };

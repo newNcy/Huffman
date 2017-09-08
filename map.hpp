@@ -1,8 +1,6 @@
 #ifndef _MAP_H
 #define _MAP_H
 
-namespace ncy 
-{
     template <typename T,typename R>
     struct _m_e
     {
@@ -39,7 +37,6 @@ namespace ncy
             return p->r;
         }
     };
-}
 
 
 #endif

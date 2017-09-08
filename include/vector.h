@@ -44,6 +44,7 @@ public:
     inline int size() const ;
     inline iterator begin();
     inline iterator end();
+    void operator = (const vector<T> & v);
     void erase(T * it);
 
     ~vector();
@@ -132,6 +133,20 @@ inline T* vector<T>::end()
 {
     return &_buff[_len-1];
 }
+
+template <typename T>
+void vector<T>::operator = (const vector<T> & v)
+{
+    if (_size != 0) {
+        delete [] _buff;
+    }
+    _size = v.size();
+    _len = v.size();
+    _buff = new T[v.size()];
+    for(int i = 0; i != v.size() ; i++) {
+        _buff[i] = v[i];
+    }
+}
 /**
  * 析构函数
  */
@@ -139,7 +154,7 @@ template <typename T>
 vector<T>::~vector()
 {
     if (_size != 0) {
-        //delete [] _buff;
+        delete [] _buff;
     }
 }
 

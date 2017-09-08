@@ -4,8 +4,10 @@
 CMakeFiles/huffman.dir/src/encoder.cpp.o: src/encoder.cpp
 CMakeFiles/huffman.dir/src/encoder.cpp.o: include/encoder.h
 CMakeFiles/huffman.dir/src/encoder.cpp.o: include/huffman_tree.h
+CMakeFiles/huffman.dir/src/encoder.cpp.o: include/vector.h
 
 CMakeFiles/huffman.dir/src/main.cpp.o: src/main.cpp
 CMakeFiles/huffman.dir/src/main.cpp.o: include/encoder.h
 CMakeFiles/huffman.dir/src/main.cpp.o: include/huffman_tree.h
+CMakeFiles/huffman.dir/src/main.cpp.o: include/vector.h
 

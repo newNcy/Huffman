@@ -21,8 +21,8 @@ encoder.h
 include/encoder.h
 cstring
 -
-vector
--
+vector.h
+include/vector.h
 sstream
 -
 huffman_tree.h
@@ -31,4 +31,8 @@ map
 -
 
 include/huffman_tree.h
+
+include/vector.h
+cstring
+-
 

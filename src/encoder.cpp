@@ -138,5 +138,5 @@ const char * encoder::encode(const char * raw)
     return res_v;
 }
 
-encoder::~encoder()
-{}
+//encoder::~encoder()
+//{}

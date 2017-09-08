@@ -137,4 +137,8 @@ const char * encoder::encode(const char * raw)
 }
 
 encoder::~encoder()
-{}
+{
+    if (_htree != nullptr) {
+
+    }
+}

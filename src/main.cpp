@@ -20,7 +20,7 @@ int main (int argc, char *argv[])
             printf("\n%s",ec.encode(str.str().c_str()));        
             printf("\n");        
             fflush(stdout);
-            break;
+            return 0;
         }
     }
 }

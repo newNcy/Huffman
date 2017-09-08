@@ -102,7 +102,7 @@ huffman_tree encoder::get_tree(const char * raw)
     root = forest[0];
     order_get_word(root);
     fflush(stdout);
-    //return _htree = root; 
+    return _htree = root; 
 }
 
 encoder::word encoder::get_word(const char *raw)
@@ -120,6 +120,7 @@ const char * encoder::encode(const char * raw)
     get_word(raw);
     int i = 0 ; 
     vector<char> res;
+    
     while (raw[i] != 0 ) {
         vector<char>& vt = _word[raw[i]];
         for (int i = 0 ; i < vt.size(); i ++) {
@@ -133,6 +134,7 @@ const char * encoder::encode(const char * raw)
         res_v[i] = res[i];
     }
     res_v[i] = 0;
+    
     return res_v;
 }
 

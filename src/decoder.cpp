@@ -7,10 +7,6 @@ void decoder::set_tree(huffman_tree & tree)
 
 const char * decoder::decode(const char * code)
 {
-    if (_tree == nullptr) {
-        printf("未配置解码树 终止...\n");
-        return nullptr;
-    }
     char * res = new char[strlen(code)];   
 
     node *  p = _tree;

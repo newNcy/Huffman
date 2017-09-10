@@ -33,7 +33,7 @@ class encoder
     vector<char> bitB;
 
     /* 先序遍历树得到编码 */
-    void order_get_word(huffman_tree h);
+    void order_get_word(node * h);
 
     /* 获取频率 */
     rate get_rate(const char *raw);

@@ -1,12 +1,10 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
-//#include "def.h"
 #include <cstring>
 /**
  * 向量
  */
 
-namespace ncy {
 template <typename T>
 class vector 
 {
@@ -14,7 +12,6 @@ private:
     T * _buff;
     int _size;
     int _len;
-    //friend class iterator;
     /*
     class iterator
     {
@@ -39,7 +36,7 @@ public:
     using iterator=T*;
     vector();
     void push_back (const T & _t);
-    void operator << (const T & _t);
+    vector<T> & operator << (const T & _t);
     T &  operator [] (int index) const ;
     inline const T * value()const ;
     inline int size() const ;
@@ -86,9 +83,10 @@ void vector<T>::push_back(const T&_t)
 /** 插入到尾部
  */
 template <typename T>
-void vector<T>::operator <<(const T&_t)
+vector<T> & vector<T>::operator <<(const T&_t)
 {
     push_back(_t);
+    return *this;
 }
 
 template<typename T>
@@ -132,7 +130,7 @@ inline T* vector<T>::begin()
 template <typename T>
 inline T* vector<T>::end()
 {
-    return &_buff[_len-1];
+    return &_buff[_len] ;
 }
 
 template <typename T>
@@ -154,11 +152,9 @@ void vector<T>::operator = (const vector<T> & v)
 template <typename T>
 vector<T>::~vector()
 {
-    if (_size != 0) {
-        //delete [] _buff;
     if (_size != 0 &&  _buff != nullptr) {
         delete [] _buff;
     }
 }
-}
+
 #endif

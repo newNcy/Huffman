@@ -45,15 +45,22 @@ class huffman_tree
         return n;
     }
 public:
+    huffman_tree(): _tree(nullptr) {}
     huffman_tree(node * root)
     {
        _tree = copy(root); 
     }
-    void operator = (const huffman_tree & c)
+    huffman_tree & operator = (const huffman_tree & c)
     {
         _tree = copy(c._tree);
+        return *this;
     }
-    nodep  operator nodep()
+    huffman_tree & operator = (node * n) 
+    {
+        _tree = copy(n);
+        return *this;
+    }
+    operator node*()
     {
         return copy(_tree);
     }

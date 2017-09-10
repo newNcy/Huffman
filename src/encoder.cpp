@@ -143,9 +143,14 @@ const char * encoder::encode(const char * raw)
     return res_v;
 }
 
+<<<<<<< HEAD
 encoder::~encoder()
 {
     if (_htree != nullptr) {
 
     }
 }
+=======
+//encoder::~encoder()
+//{}
+>>>>>>> 5ad7857d2130e2713451720b3adc374990e375ae

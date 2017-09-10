@@ -1,7 +1,7 @@
 #ifndef _DECODER_H
 #define _DECODER_H
 #include <cstring>
-#include <vector>
+#include "vector.h"
 #include <sstream>
 #include "huffman_tree.h"
 #include <map>
@@ -10,7 +10,7 @@
 
 using std::map;
 using std::stringstream;
-using std::vector;
+//using std::vector;
 
 
 /**
@@ -45,8 +45,12 @@ public:
     encoder();
     /* 对字符串进行哈夫曼编码 */
     const char * encode(const char * raw);
+<<<<<<< HEAD
     huffman_tree & tree();
     ~encoder();
+=======
+    ~encoder() = default;
+>>>>>>> 5ad7857d2130e2713451720b3adc374990e375ae
 };
 
 #endif

@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 /mingw64/bin/g++.exe      CMakeFiles/huffman.dir/src/decoder.cpp.obj CMakeFiles/huffman.dir/src/encoder.cpp.obj CMakeFiles/huffman.dir/src/main.cpp.obj  -o huffman 
+=======
+/data/data/com.termux/files/usr/bin/c++     CMakeFiles/huffman.dir/src/encoder.cpp.o CMakeFiles/huffman.dir/src/main.cpp.o  -o huffman 
+>>>>>>> 5ad7857d2130e2713451720b3adc374990e375ae

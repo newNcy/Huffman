@@ -45,6 +45,7 @@ public:
     encoder();
     /* 对字符串进行哈夫曼编码 */
     const char * encode(const char * raw);
+    huffman_tree & tree();
     ~encoder();
 };
 

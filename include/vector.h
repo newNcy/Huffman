@@ -13,12 +13,38 @@ private:
     T * _buff;
     int _size;
     int _len;
+    //friend class iterator;
+    /*
+    class iterator
+    {
+    private:
+        int ndx;
+    public:
+        void operator ++()
+        {
+            ndx ++;
+        }
+        void operator +(int i)
+        {
+            ndx +=i;
+        }
+        T & operator *()
+        {
+            return _buff[ndx];
+        }
+    };
+    */
 public:
+    using iterator=T*;
     vector();
     void push_back (const T & _t);
     void operator << (const T & _t);
-    T &  operator [] (int index);
-    const T * value()const ;
+    T &  operator [] (int index) const ;
+    inline const T * value()const ;
+    inline int size() const ;
+    inline iterator begin();
+    inline iterator end();
+    void erase(T * it);
 
     ~vector();
 
@@ -64,7 +90,12 @@ void vector<T>::operator <<(const T&_t)
 }
 
 template<typename T>
-const T *vector<T>::value() const
+inline T &  vector<T>::operator [] (int index)const
+{
+    return _buff[index];
+}
+template<typename T>
+inline const T *vector<T>::value() const
 {
     T * rev = new T[_len];
     memset((char*)rev,0,_len);
@@ -75,6 +106,32 @@ const T *vector<T>::value() const
     return rev;
 }
 
+template <typename T>
+inline int vector<T>::size() const 
+{
+    return _len;
+}
+
+template<typename T>
+void vector<T>::erase(T * it)
+{
+    for(it;it!=begin()+_len-1;it++) {
+        *it = *(it+1);
+    }
+    _len --;
+}
+
+template <typename T>
+inline T* vector<T>::begin()
+{
+    return &_buff[0];
+}
+
+template <typename T>
+inline T* vector<T>::end()
+{
+    return &_buff[_len-1];
+}
 /**
  * 析构函数
  */
@@ -82,7 +139,7 @@ template <typename T>
 vector<T>::~vector()
 {
     if (_size != 0) {
-        delete [] _buff;
+        //delete [] _buff;
     }
 }
 

@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/echo/Huffman/src/decoder.cpp
+decoder.h
+/home/echo/Huffman/src/decoder.h
+
 /home/echo/Huffman/src/encoder.cpp
 encoder.h
 /home/echo/Huffman/src/encoder.h
@@ -17,6 +21,16 @@ sstream
 -
 encoder.h
 /home/echo/Huffman/src/encoder.h
+decoder.h
+/home/echo/Huffman/src/decoder.h
+
+include/decoder.h
+huffman_tree.h
+include/huffman_tree.h
+cstring
+-
+cstdio
+-
 
 include/encoder.h
 cstring

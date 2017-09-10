@@ -123,6 +123,33 @@ huffman/fast:
 	$(MAKE) -f CMakeFiles/huffman.dir/build.make CMakeFiles/huffman.dir/build
 .PHONY : huffman/fast
 
+src/decoder.obj: src/decoder.cpp.obj
+
+.PHONY : src/decoder.obj
+
+# target to build an object file
+src/decoder.cpp.obj:
+	$(MAKE) -f CMakeFiles/huffman.dir/build.make CMakeFiles/huffman.dir/src/decoder.cpp.obj
+.PHONY : src/decoder.cpp.obj
+
+src/decoder.i: src/decoder.cpp.i
+
+.PHONY : src/decoder.i
+
+# target to preprocess a source file
+src/decoder.cpp.i:
+	$(MAKE) -f CMakeFiles/huffman.dir/build.make CMakeFiles/huffman.dir/src/decoder.cpp.i
+.PHONY : src/decoder.cpp.i
+
+src/decoder.s: src/decoder.cpp.s
+
+.PHONY : src/decoder.s
+
+# target to generate assembly for a file
+src/decoder.cpp.s:
+	$(MAKE) -f CMakeFiles/huffman.dir/build.make CMakeFiles/huffman.dir/src/decoder.cpp.s
+.PHONY : src/decoder.cpp.s
+
 src/encoder.obj: src/encoder.cpp.obj
 
 .PHONY : src/encoder.obj
@@ -186,6 +213,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... huffman"
+	@echo "... src/decoder.obj"
+	@echo "... src/decoder.i"
+	@echo "... src/decoder.s"
 	@echo "... src/encoder.obj"
 	@echo "... src/encoder.i"
 	@echo "... src/encoder.s"

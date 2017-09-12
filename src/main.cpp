@@ -1,6 +1,6 @@
 #include <cstdio>
 #include "huffman_tree.h"
-//#include <sstream>
+#include <string.h>
 //#include "encoder.h"
 //#include "decoder.h"
 //#include "vector.h"
@@ -15,11 +15,12 @@ struct byte
 };
 
 
-int memset (char * mem, int v, int size)
+int emset (char * mem, int v, int size)
 {
     for (int i = 0; i < size-1; i ++) {
         mem[i] = v;
     }
+    return size;
 }
 int * get_rate(const char * filename)
 {
@@ -89,6 +90,7 @@ node * get_tree(int * rate)
     return forest[0];
 }
 
+
 char * word[257] = {NULL};
 char wbit[100] = {0};
 int wp = 0;
@@ -115,7 +117,7 @@ void tree(node *root)
 }
 
 
-
+/* 打印树 */
 int get_height_of_tree(node * root)
 {
     if (root->nt == LEAF) return 1;
@@ -128,38 +130,95 @@ int get_height_of_tree(node * root)
     }
 }
 
+//template<typename T>
 struct nl
 {
     node * n;
-    struct ls * next;
+    struct nl * next;
 };
+/*
+template <typename T>
+class queue
+{
+    nl<T> * b;
+    nl<T> * e;
+    int l = 0;
+public:
 
-
+};
+*/
 int llen(nl * s,nl * e)
 {
     if (s == e) return 1;
-    else return 1+p_sub(s->next,e);
+    else return 1+llen(s->next,e);
 }
 
 bool check_all_null(nl * s,nl * e)
 {
     if (s->n != NULL) return false;
-    if (s == e && s->n == NULL) return true;;
+    if (s == e && s->n == NULL) return true;
+    return true;
 }
 
+void space(int i)
+{
+    for (int j = 0; j < i ; j++) {
+        printf(" ");
+    }
+}
+void nextl(int i)
+{
+    for (int j = 0; j < i ; j++) {
+        printf("\n");
+    }
+
+}
+int get_tab_of_level(int l)
+{
+    if(l == 1) return 1;
+    return (get_tab_of_level(l-1)*2)+1;
+}
 void p_tree(node *root)
 {
     int  h = get_height_of_tree(root);
     printf("%d\n",h);
     nl * s,*e;
-    s = e = root;
-    while (!check_all_null(s,e)) {
+    s = e = new nl;
+    s->n = root;
+    s->next = NULL;
+    while (h>0) {
         int nowl = llen(s,e);
         for (int i = 0 ; i < nowl; i ++) {
-            for (int j = 0 ; j < h*2-1; j ++) {
-
+               
+            int sc = get_tab_of_level(h-1);
+            space(sc);
+            if (s->n != NULL) {
+                printf("%d",s->n->w);
+            }else 
+                printf (" ");
+            space(sc);
+            space(1);
+            nl * l = new nl;
+            nl * r = new nl;
+            if ( s->n == NULL || s->n->nt == LEAF) {
+                l->n = NULL;
+                r->n = NULL;
+            }else {
+                l->n = s->n->left;
+                r->n = s->n->right;
             }
+            e->next = l;
+            e = e->next;
+            e->next = r;
+            e = e->next;
+
+            nl * t = s;
+            if (s!=NULL)
+            s = s->next;
+            delete t;
         }
+        h--;
+        nextl(h);
     }
 }
 

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,19 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/echo/Huffman/src/decoder.cpp
+/data/data/com.termux/files/home/huffman/Huffman/src/decoder.cpp
 decoder.h
-/home/echo/Huffman/src/decoder.h
+/data/data/com.termux/files/home/huffman/Huffman/src/decoder.h
 
-/home/echo/Huffman/src/encoder.cpp
+/data/data/com.termux/files/home/huffman/Huffman/src/encoder.cpp
 encoder.h
-/home/echo/Huffman/src/encoder.h
+/data/data/com.termux/files/home/huffman/Huffman/src/encoder.h
 
-/home/echo/Huffman/src/main.cpp
+/data/data/com.termux/files/home/huffman/Huffman/src/main.cpp
 cstdio
 -
 huffman_tree.h
-/home/echo/Huffman/src/huffman_tree.h
+/data/data/com.termux/files/home/huffman/Huffman/src/huffman_tree.h
+string.h
+-
 
 include/decoder.h
 huffman_tree.h

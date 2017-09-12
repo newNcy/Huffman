@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "huffman_tree.h"
 #include <string.h>
+#include <queue>
 //#include "encoder.h"
 //#include "decoder.h"
 //#include "vector.h"
@@ -136,6 +137,7 @@ struct nl
     node * n;
     struct nl * next;
 };
+
 /*
 template <typename T>
 class queue
@@ -164,6 +166,7 @@ void space(int i)
 {
     for (int j = 0; j < i ; j++) {
         printf(" ");
+
     }
 }
 void nextl(int i)
@@ -175,7 +178,7 @@ void nextl(int i)
 }
 int get_tab_of_level(int l)
 {
-    if(l == 1) return 1;
+    if(l == 0) return 2;
     return (get_tab_of_level(l-1)*2)+1;
 }
 void p_tree(node *root)
@@ -186,18 +189,23 @@ void p_tree(node *root)
     s = e = new nl;
     s->n = root;
     s->next = NULL;
-    while (h>0) {
+    while (h>= 0) {
         int nowl = llen(s,e);
+            int sc = get_tab_of_level(h-1);
         for (int i = 0 ; i < nowl; i ++) {
                
-            int sc = get_tab_of_level(h-1);
-            space(sc);
+            space(sc-2);
             if (s->n != NULL) {
-                printf("%d",s->n->w);
+                if (s->n->nt == LEAF) {
+                    printf("%3d",s->n->w, s->n->c);
+                }
+                else 
+                    printf("%3d",s->n->w);
             }else 
-                printf (" ");
+                printf ("   ");
             space(sc);
             space(1);
+            fflush(stdout);
             nl * l = new nl;
             nl * r = new nl;
             if ( s->n == NULL || s->n->nt == LEAF) {
@@ -218,15 +226,15 @@ void p_tree(node *root)
             delete t;
         }
         h--;
-        nextl(h);
+        nextl(h+1);
     }
+    fflush(stdout);
 }
 
 int main (int argc, char *argv[])
 {
     int * rate = get_rate(argv[1]);
     node * t = get_tree(rate);
-    p_tree(t);
     tree(t);
-    //huffman_tree ht (t);
+    p_tree(t);
 }

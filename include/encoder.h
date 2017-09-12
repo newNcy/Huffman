@@ -3,14 +3,12 @@
 #include <cstring>
 //#include "vector.h"
 #include <vector>
-#include <sstream>
 #include "huffman_tree.h"
 #include <map>
 
 
 
 using std::map;
-using std::stringstream;
 using std::vector;
 
 

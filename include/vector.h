@@ -154,8 +154,6 @@ void vector<T>::operator = (const vector<T> & v)
 template <typename T>
 vector<T>::~vector()
 {
-    if (_size != 0) {
-        //delete [] _buff;
     if (_size != 0 &&  _buff != nullptr) {
         delete [] _buff;
     }

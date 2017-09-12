@@ -17,12 +17,8 @@ encoder.h
 /home/echo/Huffman/src/main.cpp
 cstdio
 -
-sstream
--
-encoder.h
-/home/echo/Huffman/src/encoder.h
-decoder.h
-/home/echo/Huffman/src/decoder.h
+huffman_tree.h
+/home/echo/Huffman/src/huffman_tree.h
 
 include/decoder.h
 huffman_tree.h
@@ -36,8 +32,6 @@ include/encoder.h
 cstring
 -
 vector
--
-sstream
 -
 huffman_tree.h
 include/huffman_tree.h

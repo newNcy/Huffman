@@ -18,6 +18,7 @@ typedef struct _node
     int w;
     node_type nt;
     char c;
+    struct _node * parent;
     struct _node *left;
     struct _node * right;
 }node;
@@ -44,14 +45,26 @@ class huffman_tree
         }
         return n;
     }
+    void destroy(node *root)
+    {
+        if (root == nullptr) 
+            return;
+        if (root->nt != LEAF) {
+            destroy(root->left);
+            destroy(root->right);
+        }
+        delete root;
+    }
 public:
     huffman_tree(): _tree(nullptr) {}
     huffman_tree(node * root)
     {
+        destroy(_tree);
        _tree = copy(root); 
     }
     huffman_tree & operator = (const huffman_tree & c)
     {
+        destroy(_tree);
         _tree = copy(c._tree);
         return *this;
     }

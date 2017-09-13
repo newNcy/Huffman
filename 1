@@ -1,11 +1,7 @@
 #include <cstdio>
 #include "huffman_tree.h"
 #include <string.h>
-#include <errno.h>
-
-#define BYTE_MAX 255
-#define RATE_TYPE int
-#define RATE_SIZE (sizeof(RATE_TYPE))
+#include <queue>
 //#include "encoder.h"
 //#include "decoder.h"
 //#include "vector.h"
@@ -27,18 +23,10 @@ int emset (char * mem, int v, int size)
     }
     return size;
 }
-
-
-bool check_visable(char c)
-{
-    if (c >31 && c< 127)
-        return true;
-    return false;
-}
 int * get_rate(const char * filename)
 {
-    RATE_TYPE * rate = new RATE_TYPE[BYTE_MAX+1];
-    memset((char*)rate,0,(BYTE_MAX+1)*RATE_SIZE);
+    int * rate = new int[257];
+    memset((char*)rate,0,257*sizeof(int));
     FILE * fp = fopen(filename,"rb");
     if (fp == NULL) return rate;
     char ch = 0;
@@ -46,8 +34,8 @@ int * get_rate(const char * filename)
         ch = fgetc(fp);
         if (feof(fp)) break;
         rate[(unsigned char)ch] ++;
-        if (!check_visable(ch)) 
-            printf("\\%d",ch);
+        if (ch <= 20) 
+            printf("\\%d ",ch);
         else 
             printf("%c",ch);
     }
@@ -57,13 +45,13 @@ int * get_rate(const char * filename)
     return rate;
 }
 
-node * get_tree(RATE_TYPE * rate)
+node * get_tree(int * rate)
 {
-    node  *forest[BYTE_MAX+1] = {NULL};
+    node  *forest[257] = {NULL};
     int fs = 0;
    // memset((char*)forest,0,sizeof(node)*257);
    printf("字节频率统计:\n");
-    for (int i = 0 ; i < BYTE_MAX+1; i ++) {
+    for (int i = 0 ; i < 257; i ++) {
         if (rate[i] != 0) {
             forest[fs] = new node;
             forest[fs]->c = i;
@@ -71,8 +59,8 @@ node * get_tree(RATE_TYPE * rate)
             forest[fs]->w = rate[i];
             forest[fs]->left = forest[fs]->right = NULL;
             fs ++;
-            if (!check_visable(i))
-                printf("\\%d[%d] ",i,rate[i]);
+            if (i<21)
+                printf("\\%d[%d]",i,rate[i]);
             else
                 printf("%c[%d] ",i,rate[i]);
         }
@@ -112,7 +100,7 @@ node * get_tree(RATE_TYPE * rate)
 }
 
 
-char * word[BYTE_MAX+1] = {NULL};
+char * word[257] = {NULL};
 char wbit[100] = {0};
 int wp = 0;
 void recur_dict(node *root)
@@ -125,7 +113,7 @@ void recur_dict(node *root)
         wbit[wp++] = '1';
         recur_dict(root->right);
     }else {
-        if (check_visable(root->c))
+        if (root->c > 20)
             printf("  \'%c\' [%d] ",root->c,root->w);
         else
             printf("\'\\%d\' [%d] ",root->c, root->w);
@@ -225,7 +213,7 @@ void p_tree(node *root)
             cn(' ',sc-2);
             if (s->n != NULL) {
                 if (s->n->nt == LEAF) {
-                    if (check_visable(s->n->c))
+                    if (s->n->c > 20)
                     printf("%3c",s->n->c);
                 else 
                     printf(" \\%d",s->n->c);
@@ -264,67 +252,11 @@ void p_tree(node *root)
     fflush(stdout);
 }
 
-/* 复制一棵树 */
-node * copy_tree(node *root)
-{
-    if (root == NULL) return NULL;
-    node *croot = new node;
-    croot->c = root->c;
-    croot->nt = root->nt;
-    croot->w = root->w;
-    if (root->nt != LEAF) {
-        croot->left = copy_tree(root->left);
-        croot->right = copy_tree(root->right);
-    }
-    return croot;
-}
-
-/* 删除树 */
-void destroy_tree(node *root)
-{
-    if (root->nt != LEAF) {
-        destroy_tree(root->left);
-        destroy_tree(root->right);
-    }
-    delete root;
-}
-
-
-
-/* 压缩文件 */
-int huffman_compress(int *rate,char ** dict,  const char *filename,const char *oname)
-{
-
-    FILE * inf = fopen(oname,"rb");
-    FILE *out = fopen(oname,"wb");
-
-    if (inf == NULL) {
-        printf("打开文件失败:%s\n",filename);
-        perror("fopen");
-        return 0;
-    }
-    if (out == NULL) {
-        printf("创建文件失败:%s\n",oname);
-        perror("fopen");
-        return 0;
-    }
-
-
-    fwrite("HB",2,1,out);
-    fwrite(rate,(BYTE_MAX+1)*RATE_SIZE,1,out);
-
-    fclose(inf);
-    fclose(out);
-    return 0;
-}
 int main (int argc, char *argv[])
 {
     int * rate = get_rate(argv[1]);
     node * t = get_tree(rate);
     p_tree(t);
     printf("编码字典:\n");
-    
     recur_dict(t);
-
-    huffman_compress(rate, word, argv[1],"a.hb");
 }

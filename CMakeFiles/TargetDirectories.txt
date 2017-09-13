@@ -1,3 +1,3 @@
-/home/echo/Huffman/CMakeFiles/edit_cache.dir
-/home/echo/Huffman/CMakeFiles/rebuild_cache.dir
-/home/echo/Huffman/CMakeFiles/huffman.dir
+/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/rebuild_cache.dir
+/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/edit_cache.dir
+/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/huffman.dir

@@ -15,9 +15,6 @@
 //using std::stringstream;
 
 
-struct byte
-{
-};
 
 
 int emset (char * mem, int v, int size)
@@ -155,24 +152,75 @@ int get_height_of_tree(node * root)
     }
 }
 
-//template<typename T>
-struct nl
+template<typename T>
+struct _nl
 {
-    node * n;
-    struct nl * next;
+    T n;
+    struct _nl<T> * next;
 };
 
-/*
 template <typename T>
 class queue
 {
-    nl<T> * b;
-    nl<T> * e;
-    int l = 0;
+    using entry=_nl<T>;
+    entry * b;
+    entry * e;
+    int l;
 public:
+    using iterator = entry*;
+    queue()
+    {
+        b = nullptr;
+        e = nullptr;
+        l = 0;
+    }
+    queue<T> & push(const T & _t)
+    {
+        entry * n = new entry;
+        n->n = _t;
+        n->next = nullptr;
+
+        if (l == 0) {
+            b = e = n;
+        }else {
+            e->next = n;
+            e = e->next;
+        } 
+        l++;
+        return *this;
+    }
+
+    int size()
+    {
+        return l;
+    }
+    void pop()
+    {
+        if (l > 0) {
+            entry * t = b;
+            b = b->next;
+            delete t;
+            l--;
+        }
+    }
+    T & front()
+    {
+        return b->n;
+    }
+
+    entry * begin()
+    {
+        return b;
+    }
+
+    entry * end()
+    {
+        return e->next;
+    }
 
 };
-*/
+
+using nl=_nl<node*>; 
 int llen(nl * s,nl * e)
 {
     if (s == e) return 1;
@@ -210,9 +258,8 @@ int get_tab_of_level(int l)
 }
 void p_tree(node *root)
 {
-    printf("哈夫曼树结构:\n");
     int  h = get_height_of_tree(root);
-    printf("%d\n",h);
+    printf("哈夫曼树结构[%d]层:\n",h);
     nl * s,*e;
     s = e = new nl;
     s->n = root;
@@ -228,7 +275,7 @@ void p_tree(node *root)
                     if (check_visable(s->n->c))
                     printf("%3c",s->n->c);
                 else 
-                    printf(" \\%d",s->n->c);
+                    printf("\\%2d",s->n->c);
                 }
                 else 
                     printf("%3d",s->n->w);
@@ -291,28 +338,76 @@ void destroy_tree(node *root)
 
 
 
+void p_rate(int * rate)
+{
+    for (int i = 0 ; i < BYTE_MAX+1; i++) {
+        if (rate[i] > 0)
+        if (!check_visable(i))
+            printf("\\%d[%d] ",i,rate[i]);
+        else
+            printf("%c[%d] ",i,rate[i]);
+    }
+}
+
+void p_dict(char ** dict)
+{
+    for (int i = 0 ; i < BYTE_MAX+1; i ++) {
+        if (dict[i] != NULL)
+        printf("%c[%s]\n",i,dict[i]);
+    }
+}
+
 /* 压缩文件 */
 int huffman_compress(int *rate,char ** dict,  const char *filename,const char *oname)
 {
 
-    FILE * inf = fopen(oname,"rb");
-    FILE *out = fopen(oname,"wb");
+    FILE * inf = fopen(filename,"rb");
+    FILE *out  = fopen(oname,"wb");
 
     if (inf == NULL) {
         printf("打开文件失败:%s\n",filename);
         perror("fopen");
         return 0;
     }
+    
     if (out == NULL) {
         printf("创建文件失败:%s\n",oname);
         perror("fopen");
         return 0;
     }
 
+    //p_rate(rate);
+    //p_dict(word);
 
     fwrite("HB",2,1,out);
     fwrite(rate,(BYTE_MAX+1)*RATE_SIZE,1,out);
 
+    int c = 0;
+    using byte = char;
+    byte b = 0;
+    queue<char> buff;
+    while (true) {
+        char ch = fgetc(inf);
+        if (feof(inf)) break;
+        for (int i = 0 ; i < strlen(dict[ch]); i++) {
+            buff.push(dict[ch][i]);
+
+            printf("%c",dict[ch][i]);
+        }
+        c++;
+        if (buff.size() >= 8 ) {
+            printf(" ");
+            fflush(stdout);
+        }
+
+    }
+    for (int i = 0 ; i < buff.size(); i ++) {
+        //printf("%c",buff.front());
+        buff.pop();
+    }
+    nextl(1);
+    printf("编码[%d]字节\n",c);
+    fflush(stdout);
     fclose(inf);
     fclose(out);
     return 0;

@@ -17,13 +17,6 @@
 
 
 
-int emset (char * mem, int v, int size)
-{
-    for (int i = 0; i < size-1; i ++) {
-        mem[i] = v;
-    }
-    return size;
-}
 
 
 bool check_visable(char c)
@@ -43,10 +36,6 @@ int * get_rate(const char * filename)
         ch = fgetc(fp);
         if (feof(fp)) break;
         rate[(unsigned char)ch] ++;
-        if (!check_visable(ch)) 
-            printf("\\%d",ch);
-        else 
-            printf("%c",ch);
     }
 
     printf("\n");
@@ -68,10 +57,6 @@ node * get_tree(RATE_TYPE * rate)
             forest[fs]->w = rate[i];
             forest[fs]->left = forest[fs]->right = NULL;
             fs ++;
-            if (!check_visable(i))
-                printf("\\%d[%d] ",i,rate[i]);
-            else
-                printf("%c[%d] ",i,rate[i]);
         }
     }
 
@@ -112,20 +97,16 @@ node * get_tree(RATE_TYPE * rate)
 char * word[BYTE_MAX+1] = {NULL};
 char wbit[100] = {0};
 int wp = 0;
-void recur_dict(node *root)
+void recur_dict(node *root,char ** word)
 {
     if (root == NULL) return;
     if (root->nt != LEAF) {
         //printf("%d ",root->w);
         wbit[wp++] = '0';
-        recur_dict(root->left);
+        recur_dict(root->left,word);
         wbit[wp++] = '1';
-        recur_dict(root->right);
+        recur_dict(root->right,word);
     }else {
-        if (check_visable(root->c))
-            printf("  \'%c\' [%d] ",root->c,root->w);
-        else
-            printf("\'\\%d\' [%d] ",root->c, root->w);
        
         word[root->c] = new char[wp];
         int i = 0;
@@ -133,12 +114,19 @@ void recur_dict(node *root)
             word[root->c][i] = wbit[i];
         }
         word[root->c][i] = 0;
-        printf(" %s\n",word[root->c]);
+        //printf(" %s\n",word[root->c]);
     }
     wp --;
 }
 
 
+
+char ** get_dict(node * tree)
+{
+    char ** dict = new char *[BYTE_MAX+1];
+    recur_dict(tree,dict);
+    return dict;
+}
 /* 打印树 */
 int get_height_of_tree(node * root)
 {
@@ -273,7 +261,7 @@ void p_tree(node *root)
             if (s->n != NULL) {
                 if (s->n->nt == LEAF) {
                     if (check_visable(s->n->c))
-                    printf("%3c",s->n->c);
+                    printf("\'%c\'",s->n->c);
                 else 
                     printf("\\%2d",s->n->c);
                 }
@@ -342,10 +330,12 @@ void p_rate(int * rate)
 {
     for (int i = 0 ; i < BYTE_MAX+1; i++) {
         if (rate[i] > 0)
-        if (!check_visable(i))
+        if (!check_visable(i)) {
             printf("\\%d[%d] ",i,rate[i]);
-        else
+        }else {
             printf("%c[%d] ",i,rate[i]);
+        }
+
     }
 }
 
@@ -353,15 +343,46 @@ void p_dict(char ** dict)
 {
     for (int i = 0 ; i < BYTE_MAX+1; i ++) {
         if (dict[i] != NULL)
-        printf("%c[%s]\n",i,dict[i]);
+        if (check_visable(i))
+            printf("  \'%c\' [%s]\n",i,dict[i]);
+        else
+            printf("\'\\%d\' [%s]\n",i,dict[i]);
     }
 }
 
+
+
+void char_to_bin(char c)
+{
+    int b = 7;
+    while(b>=0) {
+        if (c>=(1<<b)) { 
+            printf("1");
+            c -= (1<<b);
+        }else {
+            printf("0");
+        }
+        b--;
+    }
+    printf(" ");
+}
+
+/* 字节位操作 */
+void put_bit_in_char(char & c,char bit, int ndx)
+{
+    // bit应该为{0 1}
+    c &= ~(1<<(8-ndx));
+    bit <<= (8-ndx);
+    c |= bit;
+}
 /* 压缩文件 */
 int huffman_compress(int *rate,char ** dict,  const char *filename,const char *oname)
 {
 
     FILE * inf = fopen(filename,"rb");
+    fseek(inf,0,SEEK_END);
+    int all = ftell(inf);
+    rewind(inf);
     FILE *out  = fopen(oname,"wb");
 
     if (inf == NULL) {
@@ -379,10 +400,11 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
     //p_rate(rate);
     //p_dict(word);
 
-    fwrite("HB",2,1,out);
+    //fwrite("HB",2,1,out);
     fwrite(rate,(BYTE_MAX+1)*RATE_SIZE,1,out);
 
     int c = 0;
+    int bitc = 0;
     using byte = char;
     byte b = 0;
     queue<char> buff;
@@ -391,19 +413,20 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
         if (feof(inf)) break;
         for (int i = 0 ; i < strlen(dict[ch]); i++) {
             buff.push(dict[ch][i]);
+            put_bit_in_char(b,dict[ch][i]-'0',bitc%8 +1 );
+            bitc++;
+            if (bitc%8 == 0) {
+                int res = fputc(b,out);
+                //if (res < 1) perror("fwrite");
+                //char_to_bin(b);
+                //fflush(out);
+                b = 0;
+            }
 
-            printf("%c",dict[ch][i]);
         }
         c++;
-        if (buff.size() >= 8 ) {
-            printf(" ");
-            fflush(stdout);
-        }
+            printf("\r[%d/%d]",c,all);
 
-    }
-    for (int i = 0 ; i < buff.size(); i ++) {
-        //printf("%c",buff.front());
-        buff.pop();
     }
     nextl(1);
     printf("编码[%d]字节\n",c);
@@ -412,14 +435,24 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
     fclose(out);
     return 0;
 }
+
+
+int huffman_uncompress(const char *filename, const char * oname)
+{
+
+}
+
+
 int main (int argc, char *argv[])
 {
     int * rate = get_rate(argv[1]);
     node * t = get_tree(rate);
-    p_tree(t);
     printf("编码字典:\n");
     
-    recur_dict(t);
-
-    huffman_compress(rate, word, argv[1],"a.hb");
+    char ** dict = get_dict(t);
+    p_dict(word);
+    huffman_compress(rate, dict, argv[1],"a.hb");
+    char c = 255;
+    put_bit_in_char(c,0,1);
+    char_to_bin(c);
 }

@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/data/data/com.termux/files/home/huffman/Huffman/src/decoder.cpp" "/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/huffman.dir/src/decoder.cpp.o"
-  "/data/data/com.termux/files/home/huffman/Huffman/src/encoder.cpp" "/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/huffman.dir/src/encoder.cpp.o"
-  "/data/data/com.termux/files/home/huffman/Huffman/src/main.cpp" "/data/data/com.termux/files/home/huffman/Huffman/CMakeFiles/huffman.dir/src/main.cpp.o"
+  "/home/echo/Huffman/src/decoder.cpp" "/home/echo/Huffman/CMakeFiles/huffman.dir/src/decoder.cpp.obj"
+  "/home/echo/Huffman/src/encoder.cpp" "/home/echo/Huffman/CMakeFiles/huffman.dir/src/encoder.cpp.obj"
+  "/home/echo/Huffman/src/main.cpp" "/home/echo/Huffman/CMakeFiles/huffman.dir/src/main.cpp.obj"
   )
-set(CMAKE_CXX_COMPILER_ID "Clang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

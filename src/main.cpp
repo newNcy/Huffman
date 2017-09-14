@@ -124,6 +124,9 @@ void recur_dict(node *root,char ** word)
 char ** get_dict(node * tree)
 {
     char ** dict = new char *[BYTE_MAX+1];
+    for (int i = 0 ; i < BYTE_MAX+1; i ++) {
+        dict[i] = NULL;
+    }
     recur_dict(tree,dict);
     return dict;
 }
@@ -238,7 +241,7 @@ void nextl(int i)
 }
 int get_tab_of_level(int l)
 {
-    if(l == 0) return 2;
+    if(l == 0) return 3;
     else if (l > 0)
         return (get_tab_of_level(l-1)*2)+1;
     else 
@@ -337,6 +340,7 @@ void p_rate(int * rate)
         }
 
     }
+    printf("\n");
 }
 
 void p_dict(char ** dict)
@@ -348,6 +352,7 @@ void p_dict(char ** dict)
         else
             printf("\'\\%d\' [%s]\n",i,dict[i]);
     }
+    printf("\n");
 }
 
 
@@ -375,6 +380,12 @@ void put_bit_in_char(char & c,char bit, int ndx)
     bit <<= (8-ndx);
     c |= bit;
 }
+
+/* 获取字节中某位 */
+char get_bit_in_char(char c,int ndx)
+{
+    return (c>>(8-ndx) & 1);
+}
 /* 压缩文件 */
 int huffman_compress(int *rate,char ** dict,  const char *filename,const char *oname)
 {
@@ -397,10 +408,7 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
         return 0;
     }
 
-    //p_rate(rate);
-    //p_dict(word);
 
-    //fwrite("HB",2,1,out);
     fwrite(rate,(BYTE_MAX+1)*RATE_SIZE,1,out);
 
     int c = 0;
@@ -418,14 +426,14 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
             if (bitc%8 == 0) {
                 int res = fputc(b,out);
                 //if (res < 1) perror("fwrite");
-                //char_to_bin(b);
-                //fflush(out);
+                char_to_bin(b);
+                fflush(out);
                 b = 0;
             }
 
         }
         c++;
-            printf("\r[%d/%d]",c,all);
+            //printf("\r[%d/%d]",c,all);
 
     }
     nextl(1);
@@ -438,21 +446,70 @@ int huffman_compress(int *rate,char ** dict,  const char *filename,const char *o
 
 
 int huffman_uncompress(const char *filename, const char * oname)
-{
+{   
+    int rate[BYTE_MAX+1] = {0};
+    FILE * inf = fopen(filename,"rb");
+    FILE * out = fopen(oname, "wb");
+    if (inf == NULL) {
+        perror("fopen");
+        return 0;
+    }
+    if (out == NULL) {
+        perror("fopen");
+        return 0;
+    }
+    /* 读取词频 */
+    fread(rate,(BYTE_MAX+1)*RATE_SIZE,1,inf);
 
+    /* 构建树 */
+    node * tree = get_tree(rate);
+    printf("读取待解压文件头\n");
+    //p_rate(rate);
+    //p_tree(tree);
+
+    node * tree_p = tree;
+    int c = 0;
+    int bitc = 0;
+    while(true) {
+        char ch = 0;
+        ch = fgetc(inf);
+        if(feof(inf)) break;
+        //char_to_bin(ch);
+        for (int  i = 0 ; i < 8; i ++) {
+            char bit = get_bit_in_char(ch,i+1);
+
+            if (bit == 0) 
+                tree_p = tree_p->left;
+            else if (bit == 1)
+                tree_p = tree_p->right;
+
+            if (tree_p->nt == LEAF) {
+                fputc(tree_p->c,out);
+                printf("%c",tree_p->c);
+                tree_p = tree;
+            }
+        }
+    }
+    printf("\n");
+    fflush(stdout);
+    fclose(inf);
+    fclose(out);
 }
 
 
 int main (int argc, char *argv[])
 {
     int * rate = get_rate(argv[1]);
-    node * t = get_tree(rate);
-    printf("编码字典:\n");
-    
-    char ** dict = get_dict(t);
-    p_dict(word);
-    huffman_compress(rate, dict, argv[1],"a.hb");
-    char c = 255;
-    put_bit_in_char(c,0,1);
-    char_to_bin(c);
+    node * tree = get_tree(rate);
+    char ** dict = get_dict(tree);
+    //p_rate(rate);
+    //p_tree(tree);
+    p_dict(dict);
+    huffman_compress(rate, dict, argv[1],"a.e");
+    huffman_uncompress("a.e","a.d");
+
+    char t = 64;
+    char g = get_bit_in_char(t,2);
+    //char_to_bin(g);
+    printf("\n");
 }
